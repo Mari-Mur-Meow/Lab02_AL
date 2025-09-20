@@ -1,0 +1,145 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Runtime.Serialization.Formatters;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace task2
+{
+    public class Vehicle
+    {
+        int x;
+        int y;
+        double price;
+        double speed;
+        int yom; //year of manufacture
+        public Vehicle() { }
+        public Vehicle(int x,int y, double price, double speed, int yom)
+        {
+            this.x = x;
+            this.y = y;
+            this.price = price;
+            this.speed = speed;
+            this.yom = yom;
+
+        }
+        public void read()
+        {
+            Console.WriteLine($"x = {x}");
+            Console.WriteLine($"y = {y}");
+            Console.WriteLine($"Price = {price}");
+            Console.WriteLine($"Speed = {speed}");
+            Console.WriteLine($"Year of manufacture = {yom}");
+        }
+    }
+    public class Plane : Vehicle
+    {
+        int altitude;
+        int nop;//number of passengers
+        public Plane() { }
+        public Plane(int x, int y, double price, double speed, int yom, int altitude, int nop) : base(x, y, price, speed, yom)
+        {
+            this.altitude = altitude;
+            this.nop = nop;
+        }
+        public new void read()
+        {
+            base.read();
+            Console.WriteLine($"altitude = {altitude}");
+            Console.WriteLine($"Number of passengers = {nop}");
+        }
+    }
+    public class Car : Vehicle
+    {
+        public Car() { }
+        public Car(int x, int y, double price, double speed, int yom) : base(x, y, price, speed, yom) { }
+    }
+    public class Ship : Vehicle
+    {
+        int port;
+        int nop;//number of passengers
+        public Ship() { }
+        public Ship(int x, int y, double price, double speed, int yom, int port, int nop) : base(x, y, price, speed, yom)
+        {
+            this.port = port;
+            this.nop = nop;
+        }
+        public new void read()
+        {
+            base.read();
+            Console.WriteLine($"Port = {port}");
+            Console.WriteLine($"Number of passengers = {nop}");
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Welcome to \"Гараж\"");
+            Console.WriteLine("Сколько транспортных средств вы хотите добавить?");
+            int count = int.Parse(Console.ReadLine());
+            Vehicle[] vehicles = new Vehicle[count];
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine($"транспорт {i+1}");
+                vehicles[i] = CreateVehicle();
+            }
+            Console.WriteLine("\n\n\n\n\nВведите 1 для просмотра характеристик ваших трапортных средств");
+            int Flag = int.Parse(Console.ReadLine());
+            if (Flag == 1)
+            {
+                for (int i = 0; i < vehicles.Length; i++)
+                {
+                    Console.WriteLine($"\nВаш транпорт{i+1}");
+                    vehicles[i].read();
+                }
+            }
+        }
+
+        static Vehicle CreateVehicle()
+        {
+            Console.WriteLine("Введите x:"); int x = int.Parse(Console.ReadLine());
+            Console.WriteLine("Введите y:"); int y = int.Parse(Console.ReadLine());
+            Console.WriteLine("Введите стоимость транпорта:"); int price = int.Parse(Console.ReadLine());
+            Console.WriteLine("Введите максимальную скорость вашего транпсорта:"); int speed = int.Parse(Console.ReadLine());
+            Console.WriteLine("Введите год выпуска вашего транспорта:"); int yom = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Выберите тип Транспорта:");
+            Console.WriteLine("1 - Plane");
+            Console.WriteLine("2 - Car");
+            Console.WriteLine("3 - Ship");
+
+            while (true)
+            {
+                
+                Console.Write("Ваш выбор (1-3): ");
+                string choice = Console.ReadLine();
+                switch (choice)
+                {
+                    case "1":
+                        Console.WriteLine("Вы ставите в гараж Plane!!! \n Пожалуйста, заполните его параметры.");
+                        Console.WriteLine("Введите Высоту полета вашего транспорта:"); int altitude = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Введите Колличество максимальное пассажиров:"); int nop = int.Parse(Console.ReadLine());
+                        return new Plane(x, y, price, speed, yom,altitude,nop);
+
+                    case "2":
+                        Console.WriteLine("Вы ставите в гараж Car");
+                        return new Car(x, y, price, speed, yom);
+
+                    case "3":
+                        Console.WriteLine("Вы ставите в гараж Ship");
+                        Console.WriteLine("Введите Порт приписки вашего транспорта:"); int Port = int.Parse(Console.ReadLine());
+                        Console.WriteLine("Введите Колличество максимальное пассажиров:"); int nops = int.Parse(Console.ReadLine());
+                        return new Ship(x, y, price, speed, yom,Port,nops);
+
+                    default:
+                        Console.WriteLine("Ошибка! Введите число от 1 до 3.");
+                        break;
+                }
+            }
+        }
+    }
+}
