@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace task3
+{
+    public class DocumentWorker
+    {
+        public virtual void OpenDocument() => Console.WriteLine("Документ открыт");
+        public virtual void EditDocument() => Console.WriteLine("Редактирование документа доступно в версии Pro");
+        public virtual void SaveDocument() => Console.WriteLine("Сохранение документа доступно в версии Pro");
+    }
+
+    // Производный класс ProDocumentWorker
+    public class ProDocumentWorker : DocumentWorker
+    {
+        public override void EditDocument() => Console.WriteLine("Документ отредактирован");
+        public override void SaveDocument() => Console.WriteLine("Документ сохранен в старом формате," +
+            " сохранение в остальных форматах доступно в версии Expert");
+    }
+
+    // Производный класс ExpertDocumentWorker
+    public class ExpertDocumentWorker : ProDocumentWorker
+    {
+        public override void SaveDocument() => Console.WriteLine("Документ сохранен в новом формате");
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                Console.WriteLine("\nЧто вы хотите сделать с документом?\n");
+                Console.WriteLine("1 - открыть \n2 - редактировать\n3 - сохарнить\n0 - чтобы завершить программу\n");
+                int count = int.Parse(Console.ReadLine());
+                if (count == 0)
+                {
+                    break;
+                }
+                DocumentWorker Dok = new DocumentWorker();
+                switch (count)
+                {
+                    case 1:
+                        Dok.OpenDocument(); break;
+                    case 2:
+                        Console.WriteLine("Для редактирования документа введите ключ");
+                        string rkey = Console.ReadLine();
+                        if (rkey == "pro")
+                        {
+                            Dok = new ProDocumentWorker();
+                        }
+                        else if (rkey == "Expert")
+                        {
+                            Dok = new ExpertDocumentWorker();
+                        }
+
+                        Dok.EditDocument();
+                        break;
+                    case 3:
+                        Console.WriteLine("Для сохранения документа введите ключ");
+                        string skey = Console.ReadLine();
+                        if (skey == "pro")
+                        {
+                            Dok = new ProDocumentWorker();
+                        }
+                        else if (skey == "Expert")
+                        {
+                            Dok = new ExpertDocumentWorker();
+                        }
+                        Dok.SaveDocument();
+                        break;
+                }
+
+
+            }
+        }
+    }
+}
