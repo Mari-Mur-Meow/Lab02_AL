@@ -1,0 +1,145 @@
+using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Security.Cryptography.X509Certificates;
+//using System.Text;
+//using System.Threading.Tasks;
+
+namespace task1
+{
+    public class Pupil
+    {
+        public virtual void Study() { }
+        public virtual void Read() { }
+        public virtual void Write() { }
+        public virtual void Relax() { }
+        
+    }
+    public class ExcelentPupil:  Pupil{
+        public override void Study()=> Console.WriteLine("Высокая обучаемость");
+        public override void Read() => Console.WriteLine("Высокая скорость чтения");
+        public override void Write() => Console.WriteLine("Красивый подчерк, высокая скорость письма");
+        public override void Relax()=> Console.WriteLine("единственный вид отдыха - СОН");
+    }
+    public class GoodPupil: Pupil{
+        public override void Study()=>Console.WriteLine("Средняя обучаемость");
+        public override void Read() => Console.WriteLine("Средняя скорость чтения");
+        public override void Write() => Console.WriteLine("Красивый подчерк, но скорость письма низкая");
+        public override void Relax() => Console.WriteLine("Отдахает, листая рилсы и ходя в зал");
+    }
+    public class BadPupil : Pupil
+    {
+        public override void Study() => Console.WriteLine("Почти не учится");
+        public override void Read() => Console.WriteLine("Высокая скорость чтения");
+        public override void Write() => Console.WriteLine("Пишет как курица лапой");
+        public override void Relax()=> Console.WriteLine("живет в кайф, сильно и не напрягается, чтобы отдыхать");
+    }
+
+    public class ClassRoom
+    {
+        Pupil[] pupils;
+        public ClassRoom(params Pupil[] pupils)
+        {
+            this.pupils = new Pupil[4];
+
+            int count = Math.Min(pupils.Length, 4);
+            for (int i = 0; i < count; i++)
+            {
+                this.pupils[i] = pupils[i];
+            }
+        }
+        public void ShowClassInfo()
+            {
+                Console.WriteLine("Характеристики класса:\n");
+
+                for (int i = 0; i < pupils.Length; i++)
+                {
+                    if (pupils[i] != null)
+                    {
+                        Console.WriteLine($"Ученик {i + 1}:");
+                        pupils[i].Study();
+                        pupils[i].Read();
+                        pupils[i].Write();
+                        pupils[i].Relax();
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Ученик {i + 1}: [Свободное место]");
+                        Console.WriteLine();
+                    }
+                }
+            }
+    }
+
+
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Создаем класс");
+
+            int pupilCount = GetPupilCount();
+
+            Pupil[] pupils = new Pupil[pupilCount];
+
+            for (int i = 0; i < pupilCount; i++)
+            {
+                Console.WriteLine($"\n Ученик {i + 1}:");
+                pupils[i] = CreatePupil();
+            }
+
+            ClassRoom classroom = new ClassRoom(pupils);
+
+            Console.WriteLine("\n");
+            classroom.ShowClassInfo();
+
+        }
+
+        static int GetPupilCount()
+        {
+            int count;
+            while (true)
+            {
+                Console.Write("\nВведите количество учеников (1-4): ");
+                if (int.TryParse(Console.ReadLine(), out count) && count >= 1 && count <= 4)
+                {
+                    return count;
+                }
+                Console.WriteLine("Ошибка! Введите число от 1 до 4.");
+            }
+        }
+
+        static Pupil CreatePupil()
+        {
+            Console.WriteLine("Выберите тип ученика:");
+            Console.WriteLine("1 - Excelent");
+            Console.WriteLine("2 - Good");
+            Console.WriteLine("3 - Bad");
+
+            while (true)
+            {
+                Console.Write("Ваш выбор (1-3): ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        Console.WriteLine("Добавлен Excelent Guy");
+                        return new ExcelentPupil();
+                    case "2":
+                        Console.WriteLine("Добавлен Good guy");
+                        return new GoodPupil();
+                    case "3":
+                        Console.WriteLine("Добавлен Bad guy");
+                        return new BadPupil();
+                    default:
+                        Console.WriteLine("Ошибка! Введите число от 1 до 3.");
+                        break;
+                }
+            }
+        }
+    }
+}
